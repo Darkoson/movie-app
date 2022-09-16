@@ -6,6 +6,7 @@ import styled from "styled-components";
 import * as movieService from "../../services";
 import { AppDispatch } from "../../shared/store/config";
 import { deleteStoreMovie, selectStoreMovies } from "../../shared/store/slices/movie-slice";
+import { Movie } from "../../shared/types";
 
 const ListMovies: FC = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const ListMovies: FC = () => {
         </div>
 
         {movieList.length > 0 ? (
-          movieList.map((movie) => (
+          movieList.map((movie:Movie) => (
             <div className="row" key={movie.id}>
               <div>{movie.name}</div>
               <div> {movie.release_year}</div>

@@ -27,7 +27,7 @@ const movieSlice = createSlice({
     },
 
     deleteStoreMovie(state, action: PayloadAction<number>) {
-      state.movies = state.movies.filter((m) => m.id !== action.payload);
+      state.movies = state.movies.filter((m:Movie) => m.id !== action.payload);
     },
   },
 });
@@ -37,7 +37,10 @@ export const { addStoreMovie, setStoreMovies, updateStoreMovie, deleteStoreMovie
 
 const moviesState = (appState: AppState) => appState.movies;
 
-export const selectStoreMovies = createSelector(moviesState, (state) => state.movies);
+export const selectStoreMovies = createSelector(
+         moviesState,
+         (state: ReturnType <typeof moviesState>) => state.movies
+       );
 //export const selectOneStoreMovie = createSelector(selectStoreMovies, ;
 
 export default movieSlice.reducer;
