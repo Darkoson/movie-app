@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import { AppDispatch } from "../../shared/store/config";
 import * as movieService from "../../services";
-import { setStoreMovies } from "../../shared/store/slices/movie-slice";
+import { setStoreMovies } from "../../shared/store/movie-slice";
 
 const Movies: FC = () => {
   const dispatch = useDispatch<AppDispatch>();

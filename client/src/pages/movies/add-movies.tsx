@@ -5,7 +5,7 @@ import styled from "styled-components";
 import * as movieService from "../../services";
 import useForm from "../../shared/hooks/useForm";
 import { AppDispatch } from "../../shared/store/config";
-import { addStoreMovie } from "../../shared/store/slices/movie-slice";
+import { addStoreMovie } from "../../shared/store/movie-slice";
 import { MovieInput } from "../../shared/types";
 
 const AddMovies: FC = () => {

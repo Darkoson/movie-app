@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import * as movieService from "../../services";
 import { AppDispatch } from "../../shared/store/config";
-import { deleteStoreMovie, selectStoreMovies } from "../../shared/store/slices/movie-slice";
+import { deleteStoreMovie, selectStoreMovies } from "../../shared/store/movie-slice";
 import { Movie } from "../../shared/types";
 
 const ListMovies: FC = () => {

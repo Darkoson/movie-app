@@ -9,7 +9,7 @@ import { AppDispatch } from "../../shared/store/config";
 import {
   selectStoreMovies,
   updateStoreMovie,
-} from "../../shared/store/slices/movie-slice";
+} from "../../shared/store/movie-slice";
 import { MovieUpdateInput } from "../../shared/types";
 
 const EditMovies: FC = () => {

@@ -7,7 +7,6 @@ import AddMovies from "./pages/movies/add-movies";
 import ListMovies from "./pages/movies/list-movies";
 import { Link } from "react-router-dom";
 import EditMovies from "./pages/movies/edit-movies";
-import EditDirectors from "./pages/directors/edit-directors";
 
 function App() {
   return (
@@ -25,12 +24,7 @@ function App() {
             <Route path="edit/:id" element={<EditMovies />} />
             <Route path="add" element={<AddMovies />} />
           </Route>
-          <Route path="directors" element={<Directors />}>
-            <Route index element={<ListMovies />} />
-            <Route path="list" element={<ListMovies />} />
-            <Route path="edit/:id" element={<EditDirectors />} />
-            <Route path="add" element={<AddMovies />} />
-          </Route>
+          <Route path="directors" element={<Directors />}></Route>
         </Routes>
       </div>
     </AppContainer>
@@ -56,10 +50,10 @@ const AppContainer = styled.div`
       }
     }
   }
-  .pages{
+  .pages {
     margin: 0 25px 50px 25px;
-  } 
-  
+  }
+
   .active {
     color: red;
   }

@@ -1,6 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Movie } from "../../types";
-import { AppState } from "../config";
+import { Movie } from "../types";
+import { AppState } from "./config";
 
 interface MoviesState {
   movies: Movie[];
