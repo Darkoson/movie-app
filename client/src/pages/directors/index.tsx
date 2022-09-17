@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import {
+  deleteStoreDirector,
   selectStoreDirectors,
   setStoreDirectors,
 } from "../../shared/store/director-slice";
@@ -38,12 +39,15 @@ const Directors: FC = () => {
   }, [dispatch]);
 
   const handleFormSubmission = (formData: Director) => {
+    console.log(" form data from index", formData);
+
     if (isCreateState) {
       let { first_name, last_name } = formData;
       movieService.postDirector({ first_name, last_name }).then((result) => {
         if (result.ok) {
           dispatch(addStoreDirector(result.data));
           initCurrentDirector();
+          setIsCreateState(true);
         } else {
           console.log("Error = ", result);
         }
@@ -55,7 +59,7 @@ const Directors: FC = () => {
       movieService.putDirector(currentDirector).then((result) => {
         if (result.ok) {
           dispatch(updateStoreDirector(result.data));
-          setIsCreateState(false);
+          setIsCreateState(true);
           initCurrentDirector();
         } else {
           console.log("Error = ", result);
@@ -64,14 +68,24 @@ const Directors: FC = () => {
     }
   };
 
-  const handleUpdate = (id: number) => {
+  const handleClickUpdate = (id: number) => {
+    setIsCreateState(false);
+
     let director = listDirectors.find((director) => director.id === id);
     if (director) {
       setCurrentDirector(director);
     }
   };
 
-  const handleDelete = (id: number) => {};
+  const handleClickDelete = (id: number) => {
+    movieService.deleteDirector(id).then((result) => {
+      if (result.ok) {
+        dispatch(deleteStoreDirector(id));
+      } else {
+        console.log("Error = ", result);
+      }
+    });
+  };
 
   const initCurrentDirector = () => {
     setCurrentDirector((prev) => ({ ...prev, first_name: "", last_name: "" }));
@@ -90,8 +104,8 @@ const Directors: FC = () => {
       <div className="directors">
         <ListDirectors
           directors={listDirectors}
-          handleUpdate={handleUpdate}
-          handleDelete={handleDelete}
+          handleUpdate={handleClickUpdate}
+          handleDelete={handleClickDelete}
         />
       </div>
     </Container>

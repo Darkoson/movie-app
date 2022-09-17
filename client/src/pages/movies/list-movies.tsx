@@ -1,11 +1,14 @@
-import React, { FC} from "react";
+import React, { FC } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import * as movieService from "../../services";
 import { AppDispatch } from "../../shared/store/config";
-import { deleteStoreMovie, selectStoreMovies } from "../../shared/store/movie-slice";
+import {
+  deleteStoreMovie,
+  selectStoreMovies,
+} from "../../shared/store/movie-slice";
 import { Movie } from "../../shared/types";
 
 const ListMovies: FC = () => {
@@ -14,13 +17,12 @@ const ListMovies: FC = () => {
   let movieList = useSelector(selectStoreMovies);
 
   const handleDelete = (id: number) => {
-    movieService.deleteMovie(id).then((result) => { 
+    movieService.deleteMovie(id).then((result) => {
       if (result.ok) {
-        dispatch(deleteStoreMovie(id))
+        dispatch(deleteStoreMovie(id));
       }
-    })
+    });
   };
-   
 
   return (
     <Container>
@@ -41,7 +43,7 @@ const ListMovies: FC = () => {
         </div>
 
         {movieList.length > 0 ? (
-          movieList.map((movie:Movie) => (
+          movieList.map((movie: Movie) => (
             <div className="row" key={movie.id}>
               <div>{movie.name}</div>
               <div> {movie.release_year}</div>
@@ -64,7 +66,7 @@ const ListMovies: FC = () => {
             </div>
           ))
         ) : (
-          <div className=""> No movie ! </div>
+          <div className="empty"> No movie ! </div>
         )}
       </div>
     </Container>
@@ -115,6 +117,9 @@ const Container = styled.div`
     span {
       font-weight: bold;
     }
+  }
+  .empty {
+    text-align: center;
   }
 `;
 

@@ -24,7 +24,7 @@ const ListDirectors: FC<ListDirectorsProps> = (props) => {
             <div className="row" key={director.id}>
               <div>{director.first_name}</div>
               <div> {director.last_name}</div>
-              <div>{director.first_name}</div>
+              {/* <div>{director.movies?.length}</div> */}
               <div>
                 <span
                   className="update"
@@ -51,6 +51,50 @@ const ListDirectors: FC<ListDirectorsProps> = (props) => {
 };
 
 const Container = styled.div`
+  position: relative;
+  button {
+    max-width: 200px;
+    right: 20px;
+    position: absolute;
+    padding: 10px;
+    border-radius: 10px;
+    align-self: flex-end;
+    border: none;
+    &:hover {
+      cursor: pointer;
+      background-color: red;
+      color: white;
+    }
+  }
+  .list {
+    margin-top: 50px;
+    width: 100%;
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 0.5fr 1fr 150px;
+      margin-top: 10px;
+      padding-bottom: 10px;
+      border-bottom: 0.5px dashed gray;
+
+      .update {
+        color: blue;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      .delete {
+        color: red;
+        margin-left: 30px;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    span {
+      font-weight: bold;
+    }
+  }
   .empty {
     text-align: center;
   }
