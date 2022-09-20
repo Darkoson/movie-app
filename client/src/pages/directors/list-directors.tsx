@@ -15,7 +15,6 @@ const ListDirectors: FC<ListDirectorsProps> = (props) => {
         <div className="row">
           <span> First Name</span>
           <span> Last Name</span>
-          <span> Total Movies</span>
           <span> Actions</span>
         </div>
 
@@ -24,7 +23,6 @@ const ListDirectors: FC<ListDirectorsProps> = (props) => {
             <div className="row" key={director.id}>
               <div>{director.first_name}</div>
               <div> {director.last_name}</div>
-              {/* <div>{director.movies?.length}</div> */}
               <div>
                 <span
                   className="update"
@@ -72,7 +70,7 @@ const Container = styled.div`
 
     .row {
       display: grid;
-      grid-template-columns: 1fr 0.5fr 1fr 150px;
+      grid-template-columns: 3fr 3fr 1.5fr;
       margin-top: 10px;
       padding-bottom: 10px;
       border-bottom: 0.5px dashed gray;

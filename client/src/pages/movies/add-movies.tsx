@@ -1,16 +1,19 @@
 import React, { FC, FormEvent } from "react";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import * as movieService from "../../services";
 import useForm from "../../shared/hooks/useForm";
 import { AppDispatch } from "../../shared/store/config";
+import { selectStoreDirectors } from "../../shared/store/director-slice";
 import { addStoreMovie } from "../../shared/store/movie-slice";
-import { MovieInput } from "../../shared/types";
+import { Director, MovieInput } from "../../shared/types";
 
 const AddMovies: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  let directors: Director[] = useSelector(selectStoreDirectors);
 
   const { inputs, handleInputChange, handleSelectChange } = useForm();
 
@@ -82,8 +85,12 @@ const AddMovies: FC = () => {
             placeholder=""
             name="director"
             onChange={handleSelectChange}>
-            <option value="3">Thomas Darko</option>
-            <option value="4">Emmanuel Darko</option>
+            <option value="">select Director</option>
+            {directors &&
+              directors.length > 0 &&
+              directors.map((director) => (
+                <option key={director.id} value={director.id}>{director.first_name +" "+director.last_name}</option>
+              ))}
           </select>
         </div>
 

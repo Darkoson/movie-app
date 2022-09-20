@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import {
   deleteStoreDirector,
-  selectStoreDirectors,
-  setStoreDirectors,
+  selectStoreDirectors
 } from "../../shared/store/director-slice";
 import { Director } from "../../shared/types";
 import DirectorsForm from "./directors-form";
@@ -30,13 +29,7 @@ const Directors: FC = () => {
 
   useEffect(() => {}, []);
 
-  useEffect(() => {
-    movieService.getDirectors().then((result) => {
-      if (result.ok) {
-        dispatch(setStoreDirectors(result.data));
-      }
-    });
-  }, [dispatch]);
+ 
 
   const handleFormSubmission = (formData: Director) => {
     console.log(" form data from index", formData);
@@ -56,9 +49,11 @@ const Directors: FC = () => {
 
     // case of update of the director
     else {
-      movieService.putDirector(currentDirector).then((result) => {
+      movieService.putDirector(formData).then((result) => {
         if (result.ok) {
           dispatch(updateStoreDirector(result.data));
+          console.log(result.data);
+
           setIsCreateState(true);
           initCurrentDirector();
         } else {
@@ -70,7 +65,6 @@ const Directors: FC = () => {
 
   const handleClickUpdate = (id: number) => {
     setIsCreateState(false);
-
     let director = listDirectors.find((director) => director.id === id);
     if (director) {
       setCurrentDirector(director);

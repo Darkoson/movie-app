@@ -1,5 +1,4 @@
 import { Director } from "../db/entities/director";
-import { Movie } from "../db/entities/movie";
 import { AppDataSource as db } from "../db/data-source";
 
 export class DirectorService {
@@ -16,20 +15,15 @@ export class DirectorService {
   ): Promise<Director | null> => {
     const repo = db.getRepository(Director);
     let director = await repo.findOneBy({ id: data.id });
-    if (director) {
-      director = { ...director, ...data };
-      return repo.save(director);
+    if (!director) {
+      throw new Error(` Director with id ${data.id} to update does not exist!`);
     }
-    return null;
+    director = { ...director, ...data };
+    return repo.save(director);
   };
 
   static listDirectors = async (): Promise<Director[]> => {
-    const directors = await db.getRepository(Director).find({
-      relations: {
-        movies: true,
-      },
-    });
-    return directors;
+    return db.getRepository(Director).find();
   };
 
   static deleteDirector = async (id: number): Promise<any> => {

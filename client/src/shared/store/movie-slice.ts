@@ -23,6 +23,7 @@ const movieSlice = createSlice({
 
     updateStoreMovie(state, action: PayloadAction<Movie>) {
       let list = state.movies.filter((m) => m.id !== action.payload.id);
+      list.unshift(action.payload)
       state.movies = list;
     },
 

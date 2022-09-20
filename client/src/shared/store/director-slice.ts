@@ -23,24 +23,31 @@ const directorSlice = createSlice({
 
     updateStoreDirector(state, action: PayloadAction<Director>) {
       let list = state.directors.filter((m) => m.id !== action.payload.id);
+      list.unshift(action.payload);
       state.directors = list;
     },
 
     deleteStoreDirector(state, action: PayloadAction<number>) {
-      state.directors = state.directors.filter((m:Director) => m.id !== action.payload);
+      state.directors = state.directors.filter(
+        (m: Director) => m.id !== action.payload
+      );
     },
   },
 });
 
-export const { addStoreDirector, setStoreDirectors, updateStoreDirector, deleteStoreDirector } =
-  directorSlice.actions;
+export const {
+  addStoreDirector,
+  setStoreDirectors,
+  updateStoreDirector,
+  deleteStoreDirector,
+} = directorSlice.actions;
 
 const directorsState = (appState: AppState) => appState.directors;
 
 export const selectStoreDirectors = createSelector(
-         directorsState,
-         (state: ReturnType <typeof directorsState>) => state.directors
-       );
+  directorsState,
+  (state: ReturnType<typeof directorsState>) => state.directors
+);
 //export const selectOneStoreDirector = createSelector(selectStoreDirectors, ;
 
 export default directorSlice.reducer;

@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useEffect } from "react";
+import React, { FC, FormEvent, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -6,36 +6,38 @@ import styled from "styled-components";
 import * as movieService from "../../services";
 import useForm from "../../shared/hooks/useForm";
 import { AppDispatch } from "../../shared/store/config";
+import { selectStoreDirectors } from "../../shared/store/director-slice";
 import {
   selectStoreMovies,
   updateStoreMovie,
 } from "../../shared/store/movie-slice";
-import { MovieUpdateInput } from "../../shared/types";
+import { Director, MovieUpdateInput } from "../../shared/types";
 
 const EditMovies: FC = () => {
+  const nameEl = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const yearEl = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const directorEl = useRef() as React.MutableRefObject<HTMLSelectElement>;
+  let directors: Director[] = useSelector(selectStoreDirectors);
+
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { id } = useParams();
-  const { inputs, setFieldAndValue, handleInputChange, handleSelectChange } =
-    useForm();
 
   let movie = useSelector(selectStoreMovies).find(
-    (movie) => Number(movie.id) === Number(id)
+    (m) => Number(m.id) === Number(id)
   );
 
-  useEffect(() => {
-    setFieldAndValue("name", movie?.name);
-    setFieldAndValue("year", movie?.release_year);
-    setFieldAndValue("director", movie?.director.id);
-  }, [movie]);
+  const initForm = (name: string, year: string): void => {
+    nameEl.current.value = name;
+    yearEl.current.value = year;
+  };
 
   const getFormData = (): MovieUpdateInput => {
-    const { name, year, director } = inputs;
     return {
       id: Number(id),
-      name,
-      director,
-      release_year: year,
+      name: nameEl.current.value,
+      director: Number(directorEl.current.value),
+      release_year: Number(yearEl.current.value),
     };
   };
 
@@ -60,12 +62,18 @@ const EditMovies: FC = () => {
   };
 
   const handleValidation = () => {
-    const { name, year, director } = inputs;
-    if (!name || !year || !director) {
+    const { name, release_year, director } = getFormData();
+    if (!name || !release_year || !director) {
       return false;
     }
     return true;
   };
+
+  useEffect(() => {
+    if (movie) {
+      initForm(movie.name, movie.release_year + "");
+    }
+  }, [movie]);
 
   return (
     <Container>
@@ -74,37 +82,27 @@ const EditMovies: FC = () => {
       <form className="add-movie form" onSubmit={onSubmit}>
         <div className="form-goup">
           <label htmlFor="name"> Movie name: </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            defaultValue={movie?.name}
-            placeholder="Title of the movie"
-            onChange={handleInputChange}
-          />
+          <input ref={nameEl} type="text" placeholder="Title of the movie" />
         </div>
 
         <div className="form-goup">
           <label htmlFor="year"> Year of Release: </label>
-          <input
-            type="number"
-            name="year"
-            defaultValue={movie?.release_year}
-            id="year"
-            onChange={handleInputChange}
-          />
+          <input ref={yearEl} type="number" name="year" />
         </div>
 
         <div className="form-goup">
           <label htmlFor="director">Director: </label>
           <select
             id="director"
-            placeholder=""
-            name="director"
-            defaultValue={movie?.director.id}
-            onChange={handleSelectChange}>
-            <option value="3">Thomas Darko</option>
-            <option value="4">Emmanuel Darko</option>
+            defaultValue={movie?.director?.id}
+            ref={directorEl}>
+            {directors &&
+              directors.length > 0 &&
+              directors.map((director) => (
+                <option key={director.id} value={director.id}>
+                  {director.first_name + " " + director.last_name}
+                </option>
+              ))}
           </select>
         </div>
 

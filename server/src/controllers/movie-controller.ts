@@ -8,12 +8,13 @@ export const postMovie = async (req: Request, res: Response<ApiResult>) => {
 
   const data = req.body as Movie;
   data.director = Number(data.director);
-  console.log("req data", data);
-
+try {
   result.data = await MovieService.createMovie(data);
-  if (!result.data) {
-    result.ok = false;
-  }
+  
+} catch (error) {
+  result.ok = false;
+  result.message = error.message || error
+}
 
   return res.status(200).send(result);
 };

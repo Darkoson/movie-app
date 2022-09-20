@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Routes, Route } from "react-router-dom";
 import Directors from "./pages/directors";
@@ -7,8 +7,24 @@ import AddMovies from "./pages/movies/add-movies";
 import ListMovies from "./pages/movies/list-movies";
 import { Link } from "react-router-dom";
 import EditMovies from "./pages/movies/edit-movies";
+import { useDispatch } from "react-redux";
+
+
+import * as movieService from "./services";
+import {  setStoreDirectors} from "./shared/store/director-slice";
+import { AppDispatch } from "./shared/store/config";
 
 function App() {
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    movieService.getDirectors().then((result) => {
+      if (result.ok) {
+        dispatch(setStoreDirectors(result.data));
+      }
+    });
+  }, []); // eslintreact-hooks/exhaustive-deps
+
   return (
     <AppContainer>
       <h1 className="app-title"> Movie Application</h1>

@@ -1,7 +1,5 @@
-import React, { FC, FormEvent, useEffect } from "react";
+import React, { FC, FormEvent, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { log } from "util";
-import useForm from "../../shared/hooks/useForm";
 import { Director } from "../../shared/types";
 
 type DirectorsFormProps = {
@@ -12,31 +10,30 @@ type DirectorsFormProps = {
 
 const DirectorsForm: FC<DirectorsFormProps> = (props) => {
   let director: Director = props.director;
+  const fnameEl = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const lnameEl = useRef() as React.MutableRefObject<HTMLInputElement>;
 
-  const { inputs, handleInputChange, setFieldAndValue } = useForm();
-  let { first_name, last_name } = inputs;
+  const initForm = (fname: string, lname: string): void => {
+    fnameEl.current.value = fname;
+    lnameEl.current.value = lname;
+  };
+
+  // const { inputs, handleInputChange, setFieldAndValue } = useForm();
+  // let { first_name, last_name } = inputs;
 
   useEffect(() => {
-    setFieldAndValue("first_name", props.director.first_name);
-    setFieldAndValue("last_name", props.director.last_name);
-    console.log("for effect director =", props.director);
+    initForm(props.director.first_name, props.director.last_name);
   }, [props.director]);
-
-  useEffect(() => {
-    setFieldAndValue("first_name", props.director.first_name);
-    setFieldAndValue("last_name", props.director.last_name);
-    console.log("for effect director =", props.director);
-  }, []);
 
   const handleForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    let first_name = fnameEl.current.value;
+    let last_name = lnameEl.current.value;
 
     if (first_name && last_name) {
       let data = { ...director, first_name, last_name };
       props.onSubmit(data);
-      setFieldAndValue("first_name", "");
-      setFieldAndValue("last_name", "");
-      console.log("input", inputs);
+      initForm("", "");
       console.log("data to submit", data);
     } else {
       console.log("Form not valid");
@@ -46,28 +43,15 @@ const DirectorsForm: FC<DirectorsFormProps> = (props) => {
   return (
     <Container>
       <form onSubmit={handleForm} className="form">
-        <div className="test">{last_name}</div>
         <div className="form-goup">
           <label htmlFor="first_name"> First name: </label>
 
-          <input
-            type="text"
-            id="first_name"
-            name="first_name"
-            defaultValue={first_name}
-            onChange={handleInputChange}
-          />
+          <input type="text" id="first_name" name="first_name" ref={fnameEl} />
         </div>
 
         <div className="form-goup">
           <label htmlFor="last_name"> Last name: </label>
-          <input
-            type="text"
-            name="last_name"
-            id="last_name"
-            defaultValue={last_name}
-            onChange={handleInputChange}
-          />
+          <input type="text" name="last_name" id="last_name" ref={lnameEl} />
         </div>
 
         <button onClick={() => {}}>

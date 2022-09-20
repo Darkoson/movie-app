@@ -1,4 +1,3 @@
-import { IMovieInput } from "../types";
 import { Director } from "../db/entities/director";
 import { Movie } from "../db/entities/movie";
 import { AppDataSource as db } from "../db/data-source";
@@ -6,27 +5,34 @@ import { DirectorService } from "./director-service";
 
 export class MovieService {
   static findMovie = (id: number): Promise<Movie | null> => {
-    return db.getRepository(Movie).findOneBy({ id });
+    return db.getRepository(Movie).findOne({
+      where: { id: id },
+      relations: {
+        director: true,
+      },
+    });
   };
 
   static createMovie = async (data: Movie): Promise<Movie> => {
-    if (typeof data.director == "number") {
-      let director = await db
-        .getRepository(Director)
-        .findOneBy({ id: data.director });
+    try {
+      if (typeof data.director == "number") {
+        let director = await db
+          .getRepository(Director)
+          .findOneBy({ id: data.director });
 
-      if (!director) {
-        return null;
+        if (!director) {
+          throw new Error(`Director not found !`);
+        }
+        data.director = director;
+      } else {
+        let director = await DirectorService.createNewDirector(data.director);
+        data.director = director;
       }
 
-      data.director = director;
-    } else {
-      let director = await DirectorService.createNewDirector(data.director);
-      data.director = director;
+      return db.getRepository(Movie).save(data);
+    } catch (err) {
+      throw err;
     }
-    console.log(" movie to save ", data);
-
-    return db.getRepository(Movie).save(data);
   };
 
   static updateMovie = async (newUpdate: Movie): Promise<Movie | null> => {
@@ -34,13 +40,15 @@ export class MovieService {
     let oldMovie = await movieRepo.findOneBy({ id: newUpdate.id });
     console.log("new der=", oldMovie);
     if (!oldMovie) {
-      return null;
+      throw new Error(`The movie with id ${newUpdate.id} does not exist!`);
     }
 
     let directorId = Number(newUpdate.director);
     let newDirector = await DirectorService.findDirector(directorId);
     if (!newDirector) {
-      return null;
+      throw new Error(
+        `New Director with id ${newUpdate.director} does not exist!`
+      );
     }
 
     console.log("new der=", newDirector);
@@ -53,12 +61,22 @@ export class MovieService {
     // newDirector.movies.push(oldMovie);
 
     // directorRepo.save(newDirector);
-    movieRepo.save(oldMovie);
+    movieRepo.update(newUpdate.id, oldMovie);
+    //movieRepo.save(oldMovie);
 
     return MovieService.findMovie(newUpdate.id);
   };
 
   static listMoviesWithDitector = async (): Promise<Movie[]> => {
+    const movies = await db.getRepository(Movie).find({
+      relations: {
+        director: true,
+      },
+    });
+    return movies;
+  };
+
+  static listMovies = async (): Promise<Movie[]> => {
     const movies = await db.getRepository(Movie).find({
       relations: {
         director: true,
