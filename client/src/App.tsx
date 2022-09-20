@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import * as movieService from "./services";
 import {  setStoreDirectors} from "./shared/store/director-slice";
 import { AppDispatch } from "./shared/store/config";
+import ViewMovies from "./pages/movies/view-movies";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,7 +24,7 @@ function App() {
         dispatch(setStoreDirectors(result.data));
       }
     });
-  }, []); // eslintreact-hooks/exhaustive-deps
+  }, [dispatch]); // eslintreact-hooks/exhaustive-deps
 
   return (
     <AppContainer>
@@ -37,6 +38,7 @@ function App() {
           <Route element={<Movies />}>
             <Route index element={<ListMovies />} />
             <Route path="list" element={<ListMovies />} />
+            <Route path="view/:id" element={<ViewMovies />} />
             <Route path="edit/:id" element={<EditMovies />} />
             <Route path="add" element={<AddMovies />} />
           </Route>
@@ -51,7 +53,8 @@ const AppContainer = styled.div`
   margin: auto;
   border: 1px solid black;
   padding: 10px, 50px;
-  max-width: 1200px;
+  max-width: 800px;
+  min-width: 400px;
   .app-title {
     text-align: center;
     color: red;

@@ -1,9 +1,9 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import {
   deleteStoreDirector,
-  selectStoreDirectors
+  selectStoreDirectors,
 } from "../../shared/store/director-slice";
 import { Director } from "../../shared/types";
 import DirectorsForm from "./directors-form";
@@ -27,13 +27,7 @@ const Directors: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const listDirectors = useSelector(selectStoreDirectors);
 
-  useEffect(() => {}, []);
-
- 
-
   const handleFormSubmission = (formData: Director) => {
-    console.log(" form data from index", formData);
-
     if (isCreateState) {
       let { first_name, last_name } = formData;
       movieService.postDirector({ first_name, last_name }).then((result) => {
@@ -87,7 +81,7 @@ const Directors: FC = () => {
 
   return (
     <Container>
-      <h1 className="title"> Directors Management</h1>
+      <h2 className="title"> Directors Management</h2>
 
       <DirectorsForm
         director={currentDirector}

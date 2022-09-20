@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import * as movieService from "../../services";
@@ -40,18 +41,14 @@ const ListMovies: FC = () => {
         <div className="row">
           <span> Movie Name</span>
           <span> Year of release</span>
-          <span> Director</span>
           <span> Actions</span>
         </div>
 
         {movieList.length > 0 ? (
           movieList.map((movie: Movie) => (
             <div className="row" key={movie.id}>
-              <div>{movie.name}</div>
+              <Link to={"/view/" + movie.id}> {movie.name}</Link>
               <div> {movie.release_year}</div>
-              <div>
-                {movie.director.first_name} {movie.director.last_name}
-              </div>
               <div>
                 <span
                   className="update"
@@ -71,6 +68,8 @@ const ListMovies: FC = () => {
           <div className="empty"> No movie ! </div>
         )}
       </div>
+
+     
     </Container>
   );
 };
@@ -97,7 +96,7 @@ const Container = styled.div`
 
     .row {
       display: grid;
-      grid-template-columns: 1fr 0.5fr 1fr 150px;
+      grid-template-columns: 3fr 1fr 150px;
       margin-top: 10px;
       padding-bottom: 10px;
       border-bottom: 0.5px dashed gray;

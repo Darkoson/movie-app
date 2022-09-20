@@ -19,7 +19,7 @@ const Movies: FC = () => {
 
   return (
     <Container>
-      <h1 className="title"> movies Management</h1>
+      <h2 className="title"> movies Management</h2>
       <Outlet />
     </Container>
   );

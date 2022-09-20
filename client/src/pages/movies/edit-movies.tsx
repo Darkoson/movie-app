@@ -107,6 +107,12 @@ const EditMovies: FC = () => {
 
         <button> update Movie </button>
       </form>
+
+      <div className="buttons">
+        <button className="list" onClick={() => navigate("/list")}>
+          Back to List
+        </button>
+      </div>
     </Container>
   );
 };
@@ -125,6 +131,17 @@ const Container = styled.div`
     .form-goup {
       display: grid;
       grid-template-columns: 150px 1fr;
+    }
+  }
+  .buttons {
+    margin-top: 2rem;
+    &:hover {
+      cursor: pointer;
+    }
+    .list {
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 `;
